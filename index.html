@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/5c503e8b03.js" crossorigin="anonymous"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <link rel=icon href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/svgs/solid/square-root-alt.svg>
+        <title>Variance  & Standard Deviation Calculator</title>
+    </head>
+    <body onload="init()">
+        <div class="container">
+            <h1 class="pt-5 font-weight-bold">Variance & Standard Deviation Calculator</h1>
+            <br/>
+            <br/>
+            <h3 class="overflow-auto">$$S^2={\sum_i^n\left(x_i-\left({\sum_i^nx_i\over n}\right)\right)^2\over n-1}$$</h3>
+            <h3 class="overflow-auto">$$S=\sqrt{S^2}$$</h3>
+            <br/>
+            <p>Where:
+                <ul>
+                    <li>\(S^2=\) variance</li>
+                    <li>\(S=\) standard deviation</li>
+                    <li>\(x=\) values of x-variable in sample</li>
+                    <li>\(n=\) length of values</li>
+                    <li>\(i=\) index of values (1, 2, 3, ..., \(n\))</li>
+                </ul>
+            </p>
+            <p class="text-justify">
+                <b>Variances</b> reflects the differences we see in the distributions.
+                Although the variance is an exceptionally important concept and one of the most commonly used statistics, 
+                it does not have the direct intuitive interpretation we would like. Because it is based on squared deviations, 
+                the result is in terms of squared units.
+            </p>
+            <p class="text-justify">
+                But squared units are awkward things to talk about and have little intuitive meaning with respect to the data.
+                Fortunately, the solution to this problem is simple: Take the square root of the variance. 
+                <b>The standard deviation</b> is defined as the positive square root of the variance and, for a sample, is symbolized as \(S\) 
+                (with a subscript identifying the variable, if necessary).
+            </p>
+            <p class="text-justify">
+                <b>Reference:</b><br/>
+                <a href="https://mega.nz/file/AItVBShb#Z_fuJK3Q1AhylWipEsTc7RTk3hwAIsnu1DdN2jQTTfc" target="_blank">Howell, D. C. 2014. 
+                <i>Fundamental Statistics for the Behavioral Sciences, 8<sup>th</sup> edition</i>.
+                Wadsworth: Wadsworth Cengage Learning.</a>
+            </p>
+            <p class="mb-4">Input your data here<i class="fas fa-chevron-circle-down text-primary px-2"></i>
+                <div class="custom-file mb-3">
+                    <input id="fileInput" type="file" class="custom-file-input" name="filename">
+                    <label id="fileLabel" class="custom-file-label text-secondary border-primary" for="customFile">.txt or .dat</label>
+                </div>
+                <div id ="dataReq" class="text-secondary">
+                    Data requirements:
+                    <ol>
+                        <li>The length of data \(\left(x\right)\) should be the same as the length of data \(\left(y\right)\)</li>
+                        <li>Your data should be in two column</li>
+                        <li>Your data extension should be .txt or .dat</li>
+                    </ol>
+                </div>
+            </p>
+            <div class="mb-5">
+                <button onclick="calculation()" class="btn btn-primary btn-block">Calculate</button>
+            </div>
+            <h2 id="warning" class="pb-5 font-weight-bold d-none text-center text-danger">Your Data Doesn't Meet The requirements</h2>
+            <div id="details" class="d-none">
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <p class="mb-4">\(x_i\)<i class="fas fa-chevron-circle-down text-primary px-2"></i> 
+                            <div id="inputX" class="border border-primary rounded overflow-auto p-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                                <span class="text-secondary">. . . . .</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#inputX')">copy</button>
+                        </p>
+                        <br/>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <p class="mb-4">\(n\)<i class="fas fa-chevron-circle-down text-primary px-2"></i> 
+                            <div id="length" class="border border-primary rounded overflow-auto p-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                                <span class="text-secondary">. . . . .</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#length')">copy</button>
+                        </p>
+                        <br/>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <p class="mb-4">\(\sum_i^nx_i\)<i class="fas fa-chevron-circle-down text-primary px-2"></i> 
+                            <div id="sumX" class="border border-primary rounded overflow-auto p-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                                <span class="text-secondary">. . . . .</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#sumX')">copy</button>
+                        </p>
+                        <br/>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                        <p class="mb-4">\({\sum_i^nx_i\over n}\)<i class="fas fa-chevron-circle-down text-primary px-2"></i> 
+                            <div id="meanX" class="border border-primary rounded overflow-auto p-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                                <span class="text-secondary">. . . . .</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#meanX')">copy</button>
+                        </p>
+                        <br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <p class="mb-4">\(x_i-\left({\sum_i^nx_i\over n}\right)\)<i class="fas fa-chevron-circle-down text-primary px-2"></i> 
+                            <div id="inputXMinusMeanX" class="border border-primary rounded overflow-auto p-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                                <span class="text-secondary">. . . . .</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#inputXMinusMeanX')">copy</button>
+                        </p>
+                        <br/>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <p class="mb-4">\(\left(x_i-\left({\sum_i^nx_i\over n}\right)\right)^2\)<i class="fas fa-chevron-circle-down text-primary px-2"></i> 
+                            <div id="squareInputXMinusMeanX" class="border border-primary rounded overflow-auto p-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                                <span class="text-secondary">. . . . .</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#squareInputXMinusMeanX')">copy</button>
+                        </p>
+                        <br/>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <p class="mb-4">\(\sum_i^n\left(x_i-\left({\sum_i^nx_i\over n}\right)\right)^2\)<i class="fas fa-chevron-circle-down text-primary px-2"></i> 
+                            <div id="sumSquareInputXMinusMeanX" class="border border-primary rounded overflow-auto p-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                                <span class="text-secondary">. . . . .</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#sumSquareInputXMinusMeanX')">copy</button>
+                        </p>
+                        <br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <p class="mb-4">\(S^2\)<i class="fas fa-chevron-circle-down text-primary px-2"></i> 
+                            <div id="s2" class="border border-primary rounded overflow-auto p-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                                <span class="text-secondary">. . . . .</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#s2')">copy</button>
+                        </p>
+                        <br/>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <p class="mb-4">\(S\)<i class="fas fa-chevron-circle-down text-primary px-2"></i> 
+                            <div id="s" class="border border-primary rounded overflow-auto p-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                                <span class="text-secondary">. . . . .</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#s')">copy</button>
+                        </p>
+                        <br/>
+                    </div>
+                </div>
+                <button id="details-hide" class="btn btn-primary btn-block">Show Details</button>
+            </div>
+            <div id="result" class="row">
+                <h3 class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 overflow-auto text-nowrap">\(S^2=\)
+                    <span id="s2-big" class="border border-primary rounded overflow-auto pb-2 pr-2 pl-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                        <span class="text-secondary">. . . . .</span>
+                    </span>
+                    <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#s2-big')">copy</button>
+                </h3>
+                <br/>
+                <br/>
+                <h3 class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 overflow-auto text-nowrap">\(S=\)
+                    <span id="s-big" class="border border-primary rounded overflow-auto pb-2 pr-2 pl-2 text-nowrap mx-2" style="max-width: fit-content;max-height: 250px;">
+                        <span class="text-secondary">. . . . .</span>
+                    </span>
+                    <button class="btn btn-outline-primary btn-sm m-2" onclick="copy('#s-big')">copy</button>
+                </h3>
+                <br/>
+            </div>
+            <button id="details-show" class="d-none btn btn-primary btn-block">Show Details</button>
+            <br/>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
