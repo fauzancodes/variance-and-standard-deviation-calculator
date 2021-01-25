@@ -128,6 +128,7 @@ function warning() {
 function showResult() {
     //showing the data result
     $("#warning").hide();
+    $("#details").hide();
     $("#result").show();
     $("#details-show").removeClass("d-none").show();
     console.log(inputX);
